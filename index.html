@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python Basics — Do Now Quiz</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:   #3b82f6;
+      --blue-d: #1d4ed8;
+      --green:  #22c55e;
+      --red:    #ef4444;
+      --bg:     #f0f4ff;
+      --card:   #ffffff;
+      --border: #e2e8f0;
+      --text:   #1e293b;
+      --muted:  #64748b;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ─────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+      color: white;
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 12px rgba(29,78,216,.25);
+    }
+    header .icon { font-size: 2rem; }
+    header h1 { font-size: 1.5rem; font-weight: 700; }
+    header p  { font-size: 0.9rem; opacity: .85; margin-top: 2px; }
+
+    /* ── Layout ──────────────────────────────────── */
+    main {
+      max-width: 820px;
+      margin: 32px auto;
+      padding: 0 16px 64px;
+    }
+
+    /* ── Progress bar ────────────────────────────── */
+    #progress-bar-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    #progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      width: 0%;
+      transition: width .4s ease;
+      border-radius: 999px;
+    }
+    #progress-label {
+      text-align: right;
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    /* ── Question cards ──────────────────────────── */
+    .question-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px 30px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.05);
+      transition: border-color .2s;
+    }
+    .question-card.answered { border-color: var(--blue); }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 13px;
+      flex-wrap: wrap;
+    }
+    .q-num {
+      background: var(--blue);
+      color: white;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .q-topic {
+      font-size: .72rem;
+      color: var(--muted);
+      background: var(--bg);
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+    .q-type-badge {
+      font-size: .72rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .q-type-badge.mc   { background: #ede9fe; color: #6d28d9; }
+    .q-type-badge.tf   { background: #fff7ed; color: #c2410c; }
+    .q-type-badge.fill { background: #ecfdf5; color: #065f46; }
+
+    .q-text {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+    .q-text code, .option span code, .fill-hint code {
+      background: #f1f5f9;
+      border: 1px solid #dde4ed;
+      padding: 1px 7px;
+      border-radius: 5px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: .88em;
+      color: #0f172a;
+    }
+    .q-text pre {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 10px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: .88rem;
+      color: #0f172a;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    /* ── Multiple Choice ─────────────────────────── */
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .15s;
+      user-select: none;
+    }
+    .option:hover { border-color: var(--blue); background: #eff6ff; }
+    .option-letter {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem; font-weight: 700;
+      flex-shrink: 0;
+      transition: all .15s;
+      color: var(--muted);
+    }
+    .option span { font-size: .95rem; }
+    .option.selected { border-color: var(--blue); background: #eff6ff; }
+    .option.selected .option-letter { background: var(--blue); border-color: var(--blue); color: white; }
+
+    /* ── True / False ────────────────────────────── */
+    .tf-options {
+      display: flex;
+      gap: 14px;
+    }
+    .tf-btn {
+      flex: 1;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      background: var(--card);
+      cursor: pointer;
+      transition: all .15s;
+      color: var(--muted);
+    }
+    .tf-btn:hover { background: #f8fafc; }
+    .tf-btn.tf-true.selected  { border-color: var(--green); background: #f0fdf4; color: #15803d; }
+    .tf-btn.tf-false.selected { border-color: var(--red);   background: #fef2f2; color: #b91c1c; }
+    .tf-btn.tf-true:not(.selected):hover  { border-color: var(--green); }
+    .tf-btn.tf-false:not(.selected):hover { border-color: var(--red); }
+
+    /* ── Fill in the Blank ───────────────────────── */
+    .fill-wrap { display: flex; flex-direction: column; gap: 8px; }
+    .fill-hint { font-size: .82rem; color: var(--muted); }
+    .fill-input {
+      padding: 11px 14px;
+      font-size: .97rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      transition: border-color .2s;
+      font-family: inherit;
+      width: 100%;
+      max-width: 340px;
+    }
+    .fill-input:focus { border-color: var(--blue); }
+
+    /* ── Submit section ───────────────────────────── */
+    #submit-section {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    #submit-note { font-size: .82rem; color: var(--muted); text-align: center; }
+    #btn-submit {
+      padding: 14px 52px;
+      background: var(--green);
+      color: white;
+      font-size: 1.05rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(34,197,94,.35);
+      transition: all .2s;
+    }
+    #btn-submit:hover { background: #16a34a; transform: translateY(-1px); }
+    #btn-submit:active { transform: translateY(0); }
+    #btn-submit:disabled { background: #94a3b8; box-shadow: none; transform: none; cursor: default; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="icon">🐍</div>
+  <div>
+    <h1>Python Basics — Do Now</h1>
+    <p>Print statements · Data types · Variables · Assigning</p>
+  </div>
+</header>
+
+<main>
+  <div id="progress-label">0 / 12 answered</div>
+  <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+  <div id="questions-container"></div>
+  <div id="submit-section">
+    <div id="submit-note">You can submit at any time — unanswered questions will be marked as incorrect.</div>
+    <button id="btn-submit" onclick="submitQuiz()">Submit &amp; Download Report</button>
+  </div>
+</main>
+
+<script>
+/* ════════════════════════════════════════════════════
+   QUESTIONS  (types: 'mc' | 'tf' | 'fill')
+   ════════════════════════════════════════════════════ */
+const QUESTIONS = [
+  // ── Multiple Choice ──────────────────────────────
+  {
+    type: 'mc',
+    topic: 'Print Statements',
+    text: 'What is the output of <code>print(2 + 3)</code>?',
+    options: ['"2 + 3"', '23', 'Error', '5'],
+    answer: 3
+  },
+  {
+    type: 'mc',
+    topic: 'Data Types',
+    text: 'What is the data type of <code>"Python"</code>?',
+    options: ['int', 'float', 'bool', 'str'],
+    answer: 3
+  },
+  {
+    type: 'mc',
+    topic: 'Data Types',
+    text: 'What is the data type of <code>42</code>?',
+    options: ['float', 'str', 'int', 'bool'],
+    answer: 2
+  },
+  {
+    type: 'mc',
+    topic: 'Assigning',
+    text: 'Which of the following correctly assigns the value <code>10</code> to a variable called <code>score</code>?',
+    options: ['<code>score == 10</code>', '<code>10 = score</code>', '<code>score = 10</code>', '<code>score := 10</code>'],
+    answer: 2
+  },
+
+  // ── True / False ─────────────────────────────────
+  {
+    type: 'tf',
+    topic: 'Print Statements',
+    text: 'In Python, <code>print("Hello")</code> is the correct way to display text on the screen.',
+    answer: true
+  },
+  {
+    type: 'tf',
+    topic: 'Print Statements',
+    text: '<code>Print("Hello")</code> with a capital P works the same as <code>print("Hello")</code> in Python.',
+    answer: false
+  },
+  {
+    type: 'tf',
+    topic: 'Data Types',
+    text: '<code>True</code> and <code>False</code> are examples of the <code>bool</code> data type in Python.',
+    answer: true
+  },
+  {
+    type: 'tf',
+    topic: 'Variables',
+    text: 'Variable names in Python can start with a number — for example, <code>2score</code> is a valid variable name.',
+    answer: false
+  },
+
+  // ── Fill in the Blank ────────────────────────────
+  {
+    type: 'fill',
+    topic: 'Print Statements',
+    text: 'What is the output of <code>print("Welcome")</code>?<br><span class="fill-hint">Type exactly what would appear on the screen.</span>',
+    accepted: ['welcome'],
+    display: 'Welcome',
+    placeholder: 'Type the output…'
+  },
+  {
+    type: 'fill',
+    topic: 'Data Types',
+    text: 'What is the data type of <code>3.14</code> in Python?<br><span class="fill-hint">Use the Python type name, e.g. <code>int</code>, <code>str</code>…</span>',
+    accepted: ['float'],
+    display: 'float',
+    placeholder: 'e.g. int, str…'
+  },
+  {
+    type: 'fill',
+    topic: 'Variables',
+    text: 'What is the output of the following code?<pre>name = "Alice"\nprint(name)</pre>',
+    accepted: ['alice'],
+    display: 'Alice',
+    placeholder: 'Type the output…'
+  },
+  {
+    type: 'fill',
+    topic: 'Assigning',
+    text: 'What is the value stored in <code>x</code> after running <code>x = 8</code>?',
+    accepted: ['8'],
+    display: '8',
+    placeholder: 'Type the value…'
+  }
+];
+
+const LETTERS = ['A', 'B', 'C', 'D'];
+const TYPE_LABELS = { mc: 'Multiple Choice', tf: 'True / False', fill: 'Fill in the Blank' };
+
+/* ════════════════════════════════════════════════════
+   STATE
+   answers[qi]:
+     mc   → number (option index) | null
+     tf   → true | false | null
+     fill → string (may be empty)
+   ════════════════════════════════════════════════════ */
+const answers = new Array(QUESTIONS.length).fill(null);
+
+/* ════════════════════════════════════════════════════
+   RENDER
+   ════════════════════════════════════════════════════ */
+(function renderQuestions() {
+  const container = document.getElementById('questions-container');
+
+  QUESTIONS.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `card-${qi}`;
+
+    let inputHtml = '';
+
+    if (q.type === 'mc') {
+      inputHtml = `<div class="options">${q.options.map((opt, oi) => `
+        <label class="option" id="opt-${qi}-${oi}" onclick="selectMC(${qi},${oi})">
+          <div class="option-letter">${LETTERS[oi]}</div>
+          <span>${opt}</span>
+        </label>`).join('')}</div>`;
+
+    } else if (q.type === 'tf') {
+      inputHtml = `<div class="tf-options">
+        <button class="tf-btn tf-true"  id="tf-${qi}-true"  onclick="selectTF(${qi},true)">True</button>
+        <button class="tf-btn tf-false" id="tf-${qi}-false" onclick="selectTF(${qi},false)">False</button>
+      </div>`;
+
+    } else {
+      inputHtml = `<div class="fill-wrap">
+        <input class="fill-input" id="fill-${qi}" type="text"
+          placeholder="${q.placeholder}" autocomplete="off" autocorrect="off" spellcheck="false"
+          oninput="typeFill(${qi}, this.value)" />
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-meta">
+        <span class="q-num">Q${qi + 1}</span>
+        <span class="q-topic">${q.topic}</span>
+        <span class="q-type-badge ${q.type}">${TYPE_LABELS[q.type]}</span>
+      </div>
+      <div class="q-text">${q.text}</div>
+      ${inputHtml}`;
+
+    container.appendChild(card);
+  });
+})();
+
+/* ════════════════════════════════════════════════════
+   INTERACTION
+   ════════════════════════════════════════════════════ */
+function selectMC(qi, oi) {
+  if (answers[qi] !== null) {
+    const prev = document.getElementById(`opt-${qi}-${answers[qi]}`);
+    if (prev) prev.classList.remove('selected');
+  }
+  answers[qi] = oi;
+  document.getElementById(`opt-${qi}-${oi}`).classList.add('selected');
+  markAnswered(qi);
+}
+
+function selectTF(qi, val) {
+  answers[qi] = val;
+  document.getElementById(`tf-${qi}-true`).classList.toggle('selected',  val === true);
+  document.getElementById(`tf-${qi}-false`).classList.toggle('selected', val === false);
+  markAnswered(qi);
+}
+
+function typeFill(qi, val) {
+  answers[qi] = val;
+  const card = document.getElementById(`card-${qi}`);
+  if (val.trim().length > 0) {
+    card.classList.add('answered');
+  } else {
+    card.classList.remove('answered');
+  }
+  updateProgress();
+}
+
+function markAnswered(qi) {
+  document.getElementById(`card-${qi}`).classList.add('answered');
+  updateProgress();
+}
+
+function isAnswered(qi) {
+  const a = answers[qi];
+  if (a === null) return false;
+  if (typeof a === 'string') return a.trim().length > 0;
+  return true;
+}
+
+function updateProgress() {
+  const done = answers.filter((_, i) => isAnswered(i)).length;
+  const total = QUESTIONS.length;
+  document.getElementById('progress-bar').style.width = (done / total * 100) + '%';
+  document.getElementById('progress-label').textContent = `${done} / ${total} answered`;
+}
+
+/* ════════════════════════════════════════════════════
+   SCORING
+   ════════════════════════════════════════════════════ */
+function checkCorrect(qi) {
+  const q = QUESTIONS[qi];
+  const a = answers[qi];
+  if (!isAnswered(qi)) return false;
+  if (q.type === 'mc') return a === q.answer;
+  if (q.type === 'tf') return a === q.answer;
+  if (q.type === 'fill') return q.accepted.includes(a.toLowerCase().trim());
+  return false;
+}
+
+function getDisplayAnswer(qi) {
+  const q = QUESTIONS[qi];
+  const a = answers[qi];
+  if (!isAnswered(qi)) return 'Not answered';
+  if (q.type === 'mc') return stripHtml(q.options[a]);
+  if (q.type === 'tf') return a ? 'True' : 'False';
+  return a;
+}
+
+function getCorrectDisplay(qi) {
+  const q = QUESTIONS[qi];
+  if (q.type === 'mc') return stripHtml(q.options[q.answer]);
+  if (q.type === 'tf') return q.answer ? 'True' : 'False';
+  return q.display;
+}
+
+/* ════════════════════════════════════════════════════
+   SUBMIT
+   ════════════════════════════════════════════════════ */
+function submitQuiz() {
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.textContent = 'Generating report…';
+  // slight delay so browser repaints the disabled state before heavy canvas work
+  setTimeout(generateReport, 50);
+}
+
+/* ════════════════════════════════════════════════════
+   REPORT GENERATION (Canvas → PNG)
+   ════════════════════════════════════════════════════ */
+function stripHtml(html) {
+  const d = document.createElement('div');
+  d.innerHTML = html;
+  return d.textContent || d.innerText || '';
+}
+
+function truncate(str, max) {
+  return str.length > max ? str.slice(0, max - 1) + '…' : str;
+}
+
+function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);      ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+  if (fill)   { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1.5; ctx.stroke(); }
+}
+
+function generateReport() {
+  const total  = QUESTIONS.length;
+  const score  = QUESTIONS.map((_, i) => checkCorrect(i)).filter(Boolean).length;
+  const pct    = Math.round(score / total * 100);
+  const wrong  = QUESTIONS.map((_, i) => i).filter(i => !checkCorrect(i));
+  const dateStr = new Date().toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const scoreColor = pct >= 80 ? '#22c55e' : pct >= 60 ? '#f59e0b' : '#ef4444';
+
+  const W            = 940;
+  const PAD          = 36;
+  const HEADER_H     = 100;
+  const SUMMARY_H    = 110;
+  const SEC_GAP      = 28;
+  const TBL_HEAD_H   = 38;
+  const TBL_ROW_H    = 44;
+  const WRONG_ROW_H  = 86;
+  const FOOTER_H     = 50;
+
+  const H = HEADER_H
+    + SEC_GAP + SUMMARY_H
+    + SEC_GAP + 22 + TBL_HEAD_H + TBL_ROW_H * total
+    + (wrong.length > 0 ? SEC_GAP + 22 + wrong.length * (WRONG_ROW_H + 8) : 0)
+    + SEC_GAP + FOOTER_H;
+
+  const canvas = document.createElement('canvas');
+  canvas.width  = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#f0f4ff';
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Header ─────────────────────────────────────
+  const hGrad = ctx.createLinearGradient(0, 0, W, 0);
+  hGrad.addColorStop(0, '#1d4ed8');
+  hGrad.addColorStop(1, '#3b82f6');
+  ctx.fillStyle = hGrad;
+  ctx.fillRect(0, 0, W, HEADER_H);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.07)';
+  ctx.beginPath(); ctx.arc(W - 50, 50, 90, 0, Math.PI * 2); ctx.fill();
+
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 26px "Segoe UI", sans-serif';
+  ctx.fillText('Python Basics Quiz — Do Now', PAD, 42);
+  ctx.font = '14px "Segoe UI", sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,.82)';
+  ctx.fillText('Print Statements  ·  Data Types  ·  Variables  ·  Assigning', PAD, 66);
+  ctx.fillText(dateStr, PAD, 87);
+
+  // ── Score Summary ───────────────────────────────
+  let y = HEADER_H + SEC_GAP;
+  roundRect(ctx, PAD, y, W - PAD * 2, SUMMARY_H, 12, '#fff', '#e2e8f0');
+
+  ctx.fillStyle = scoreColor;
+  ctx.font = `bold 50px "Segoe UI", sans-serif`;
+  ctx.fillText(`${score}/${total}`, PAD + 22, y + 62);
+  ctx.font = 'bold 20px "Segoe UI", sans-serif';
+  ctx.fillText(`${pct}%`, PAD + 22, y + 88);
+
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(PAD + 145, y + 16); ctx.lineTo(PAD + 145, y + SUMMARY_H - 16); ctx.stroke();
+
+  ctx.fillStyle = '#64748b';
+  ctx.font = '14px "Segoe UI", sans-serif';
+  ctx.fillText(`Correct: ${score}   ·   Incorrect: ${total - score}   ·   Score: ${pct}%`, PAD + 164, y + 38);
+
+  const grade = pct >= 80 ? 'Great work!' : pct >= 60 ? 'Good effort — keep practising!' : 'Keep going — you can do it!';
+  ctx.fillStyle = scoreColor;
+  ctx.font = 'bold 14px "Segoe UI", sans-serif';
+  ctx.fillText(grade, PAD + 164, y + 62);
+
+  // Type legend
+  const legend = [['MC', '#6d28d9', '#ede9fe'], ['T/F', '#c2410c', '#fff7ed'], ['Fill', '#065f46', '#ecfdf5']];
+  let lx = PAD + 164;
+  const ly = y + 90;
+  ctx.font = '11px "Segoe UI", sans-serif';
+  legend.forEach(([label, fg, bg]) => {
+    roundRect(ctx, lx, ly - 13, 38, 18, 5, bg, null);
+    ctx.fillStyle = fg; ctx.font = 'bold 11px "Segoe UI", sans-serif';
+    ctx.fillText(label, lx + 7, ly);
+    lx += 46;
+  });
+
+  // ── All Questions Table ─────────────────────────
+  y += SUMMARY_H + SEC_GAP;
+  ctx.fillStyle = '#1e293b';
+  ctx.font = 'bold 15px "Segoe UI", sans-serif';
+  ctx.fillText('Question Breakdown', PAD, y);
+  y += 18;
+
+  // Table header
+  roundRect(ctx, PAD, y, W - PAD * 2, TBL_HEAD_H, 8, '#1d4ed8', null);
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 12px "Segoe UI", sans-serif';
+  const colX = [PAD + 10, PAD + 44, PAD + 120, PAD + 400, PAD + 600, PAD + 768];
+  ['#', 'Type', 'Topic / Question', 'Your Answer', 'Correct Answer', 'Result'].forEach((h, i) => ctx.fillText(h, colX[i], y + 25));
+  y += TBL_HEAD_H;
+
+  QUESTIONS.forEach((q, qi) => {
+    const correct = checkCorrect(qi);
+    roundRect(ctx, PAD, y, W - PAD * 2, TBL_ROW_H, 0, qi % 2 === 0 ? '#fff' : '#f8fafc', null);
+    ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD, y + TBL_ROW_H); ctx.lineTo(W - PAD, y + TBL_ROW_H); ctx.stroke();
+
+    const mid = y + TBL_ROW_H / 2 + 5;
+
+    ctx.fillStyle = '#64748b'; ctx.font = 'bold 12px "Segoe UI", sans-serif';
+    ctx.fillText(qi + 1, colX[0], mid);
+
+    // Type mini-badge
+    const [tbg, tfg] = q.type === 'mc' ? ['#ede9fe','#6d28d9'] : q.type === 'tf' ? ['#fff7ed','#c2410c'] : ['#ecfdf5','#065f46'];
+    const typeLabel  = q.type === 'mc' ? 'MC' : q.type === 'tf' ? 'T/F' : 'Fill';
+    roundRect(ctx, colX[1], y + 10, 36, 22, 5, tbg, null);
+    ctx.fillStyle = tfg; ctx.font = 'bold 11px "Segoe UI", sans-serif';
+    ctx.fillText(typeLabel, colX[1] + 5, y + 26);
+
+    ctx.fillStyle = '#1e293b'; ctx.font = '12px "Segoe UI", sans-serif';
+    ctx.fillText(`${q.topic}`, colX[2], mid - 7);
+    ctx.fillStyle = '#64748b'; ctx.font = '11px "Segoe UI", sans-serif';
+    ctx.fillText(truncate(stripHtml(q.text), 42), colX[2], mid + 8);
+
+    ctx.fillStyle = correct ? '#15803d' : '#b91c1c';
+    ctx.font = '12px "Segoe UI", sans-serif';
+    ctx.fillText(truncate(getDisplayAnswer(qi), 28), colX[3], mid);
+
+    ctx.fillStyle = '#15803d';
+    ctx.fillText(truncate(getCorrectDisplay(qi), 28), colX[4], mid);
+
+    // Result badge
+    roundRect(ctx, colX[5] - 2, y + 9, 90, 24, 6, correct ? '#dcfce7' : '#fee2e2', null);
+    ctx.fillStyle = correct ? '#166534' : '#991b1b';
+    ctx.font = 'bold 12px "Segoe UI", sans-serif';
+    ctx.fillText(correct ? '✓ Correct' : '✗ Wrong', colX[5] + 6, y + 26);
+
+    y += TBL_ROW_H;
+  });
+
+  // ── Questions to Review ─────────────────────────
+  if (wrong.length > 0) {
+    y += SEC_GAP;
+    ctx.fillStyle = '#1e293b';
+    ctx.font = 'bold 15px "Segoe UI", sans-serif';
+    ctx.fillText('Questions to Review', PAD, y);
+    y += 18;
+
+    wrong.forEach(qi => {
+      const q = QUESTIONS[qi];
+      roundRect(ctx, PAD, y, W - PAD * 2, WRONG_ROW_H, 10, '#fff', '#fecaca');
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(PAD, y, 5, WRONG_ROW_H);
+
+      ctx.fillStyle = '#ef4444'; ctx.font = 'bold 12px "Segoe UI", sans-serif';
+      ctx.fillText(`Q${qi + 1}  ·  ${q.topic}  ·  ${TYPE_LABELS[q.type]}`, PAD + 16, y + 18);
+
+      ctx.fillStyle = '#1e293b'; ctx.font = '13px "Segoe UI", sans-serif';
+      ctx.fillText(truncate(stripHtml(q.text), 90), PAD + 16, y + 36);
+
+      ctx.fillStyle = '#b91c1c'; ctx.font = '12px "Segoe UI", sans-serif';
+      ctx.fillText(`✗ Your answer:     ${truncate(getDisplayAnswer(qi), 55)}`, PAD + 16, y + 57);
+
+      ctx.fillStyle = '#166534'; ctx.font = '12px "Segoe UI", sans-serif';
+      ctx.fillText(`✓ Correct answer:  ${truncate(getCorrectDisplay(qi), 55)}`, PAD + 16, y + 74);
+
+      y += WRONG_ROW_H + 8;
+    });
+  }
+
+  // ── Footer ──────────────────────────────────────
+  y += SEC_GAP;
+  ctx.fillStyle = '#e2e8f0';
+  ctx.fillRect(PAD, y, W - PAD * 2, 1);
+  y += 14;
+  ctx.fillStyle = '#94a3b8'; ctx.font = '12px "Segoe UI", sans-serif';
+  ctx.fillText('Python Basics Do Now Quiz  ·  Generated automatically upon submission', PAD, y + 12);
+  ctx.textAlign = 'right';
+  ctx.fillText(`Score: ${score}/${total} (${pct}%)  ·  ${dateStr}`, W - PAD, y + 12);
+  ctx.textAlign = 'left';
+
+  // ── Download ────────────────────────────────────
+  const link = document.createElement('a');
+  link.download = `python_basics_quiz_${Date.now()}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+
+  const btn = document.getElementById('btn-submit');
+  btn.textContent = '✓ Report Downloaded!';
+  btn.style.background = '#1d4ed8';
+}
+</script>
+</body>
+</html>
