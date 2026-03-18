@@ -243,7 +243,7 @@
   <div class="icon">🐍</div>
   <div>
     <h1>Python Basics — Do Now</h1>
-    <p>Print statements · Data types · Variables · Assigning</p>
+    <p>Comments · Inputs · Print statements · Syntax errors · Logic errors</p>
   </div>
 </header>
 
@@ -265,91 +265,91 @@ const QUESTIONS = [
   // ── Multiple Choice ──────────────────────────────
   {
     type: 'mc',
-    topic: 'Print Statements',
-    text: 'What is the output of <code>print(2 + 3)</code>?',
-    options: ['"2 + 3"', '23', 'Error', '5'],
-    answer: 3
-  },
-  {
-    type: 'mc',
-    topic: 'Data Types',
-    text: 'What is the data type of <code>"Python"</code>?',
-    options: ['int', 'float', 'bool', 'str'],
-    answer: 3
-  },
-  {
-    type: 'mc',
-    topic: 'Data Types',
-    text: 'What is the data type of <code>42</code>?',
-    options: ['float', 'str', 'int', 'bool'],
+    topic: 'Print',
+    text: 'What is the output of <code>print("Hello" + "World")</code>?',
+    options: ['Hello World', 'Hello+World', 'HelloWorld', 'Error'],
     answer: 2
   },
   {
     type: 'mc',
-    topic: 'Assigning',
-    text: 'Which of the following correctly assigns the value <code>10</code> to a variable called <code>score</code>?',
-    options: ['<code>score == 10</code>', '<code>10 = score</code>', '<code>score = 10</code>', '<code>score := 10</code>'],
-    answer: 2
+    topic: 'Input',
+    text: 'Which function is used to get input from the user in Python?',
+    options: ['<code>get()</code>', '<code>input()</code>', '<code>read()</code>', '<code>ask()</code>'],
+    answer: 1
+  },
+  {
+    type: 'mc',
+    topic: 'Syntax Errors',
+    text: 'Which of the following lines contains a <strong>syntax error</strong>?',
+    options: ['<code>print("Hi")</code>', '<code>print("Hi"</code>', '<code>x = 5</code>', '<code># This is a comment</code>'],
+    answer: 1
+  },
+  {
+    type: 'mc',
+    topic: 'Logic Errors',
+    text: 'A student wants to display their username, but writes <code>print("username")</code> instead of <code>print(username)</code>. What type of error is this?',
+    options: ['Syntax error', 'Logic error', 'No error — it works correctly', 'Missing bracket error'],
+    answer: 1
   },
 
   // ── True / False ─────────────────────────────────
   {
     type: 'tf',
-    topic: 'Print Statements',
-    text: 'In Python, <code>print("Hello")</code> is the correct way to display text on the screen.',
+    topic: 'Comments',
+    text: 'In Python, comments start with the <code>#</code> symbol.',
     answer: true
   },
   {
     type: 'tf',
-    topic: 'Print Statements',
-    text: '<code>Print("Hello")</code> with a capital P works the same as <code>print("Hello")</code> in Python.',
+    topic: 'Comments',
+    text: 'Python runs comments as part of the program — they affect how the code works.',
     answer: false
   },
   {
     type: 'tf',
-    topic: 'Data Types',
-    text: '<code>True</code> and <code>False</code> are examples of the <code>bool</code> data type in Python.',
+    topic: 'Logic Errors',
+    text: 'A logic error will always stop your program from running and show an error message.',
+    answer: false
+  },
+  {
+    type: 'tf',
+    topic: 'Syntax Errors',
+    text: 'A syntax error occurs when Python cannot understand your code because it breaks the language rules (e.g. a missing bracket).',
     answer: true
-  },
-  {
-    type: 'tf',
-    topic: 'Variables',
-    text: 'Variable names in Python can start with a number — for example, <code>2score</code> is a valid variable name.',
-    answer: false
   },
 
   // ── Fill in the Blank ────────────────────────────
   {
     type: 'fill',
-    topic: 'Print Statements',
-    text: 'What is the output of <code>print("Welcome")</code>?<br><span class="fill-hint">Type exactly what would appear on the screen.</span>',
-    accepted: ['welcome'],
-    display: 'Welcome',
+    topic: 'Comments',
+    text: 'What symbol is used to write a comment in Python?<br><span class="fill-hint">Type the symbol only.</span>',
+    accepted: ['#'],
+    display: '#',
+    placeholder: 'Type the symbol…'
+  },
+  {
+    type: 'fill',
+    topic: 'Input',
+    text: 'Complete the code so it asks the user for their name:<pre>name = ___("What is your name? ")</pre><span class="fill-hint">Type the missing function name.</span>',
+    accepted: ['input'],
+    display: 'input',
+    placeholder: 'Function name…'
+  },
+  {
+    type: 'fill',
+    topic: 'Print',
+    text: 'What is the output of the following code?<pre>print(3 * 4)</pre>',
+    accepted: ['12'],
+    display: '12',
     placeholder: 'Type the output…'
   },
   {
     type: 'fill',
-    topic: 'Data Types',
-    text: 'What is the data type of <code>3.14</code> in Python?<br><span class="fill-hint">Use the Python type name, e.g. <code>int</code>, <code>str</code>…</span>',
-    accepted: ['float'],
-    display: 'float',
-    placeholder: 'e.g. int, str…'
-  },
-  {
-    type: 'fill',
-    topic: 'Variables',
-    text: 'What is the output of the following code?<pre>name = "Alice"\nprint(name)</pre>',
-    accepted: ['alice'],
-    display: 'Alice',
+    topic: 'Logic Errors',
+    text: 'A student meant to print <code>Hello World</code> but made a logic error. What does this code actually print?<pre>print("Hllo wrld")</pre>',
+    accepted: ['hllo wrld'],
+    display: 'Hllo wrld',
     placeholder: 'Type the output…'
-  },
-  {
-    type: 'fill',
-    topic: 'Assigning',
-    text: 'What is the value stored in <code>x</code> after running <code>x = 8</code>?',
-    accepted: ['8'],
-    display: '8',
-    placeholder: 'Type the value…'
   }
 ];
 
@@ -575,7 +575,7 @@ function generateReport() {
   ctx.fillText('Python Basics Quiz — Do Now', PAD, 42);
   ctx.font = '14px "Segoe UI", sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,.82)';
-  ctx.fillText('Print Statements  ·  Data Types  ·  Variables  ·  Assigning', PAD, 66);
+  ctx.fillText('Comments  ·  Inputs  ·  Print Statements  ·  Syntax Errors  ·  Logic Errors', PAD, 66);
   ctx.fillText(dateStr, PAD, 87);
 
   // ── Score Summary ───────────────────────────────
@@ -702,7 +702,7 @@ function generateReport() {
   ctx.fillRect(PAD, y, W - PAD * 2, 1);
   y += 14;
   ctx.fillStyle = '#94a3b8'; ctx.font = '12px "Segoe UI", sans-serif';
-  ctx.fillText('Python Basics Do Now Quiz  ·  Generated automatically upon submission', PAD, y + 12);
+  ctx.fillText('Python Do Now Quiz  ·  Comments · Inputs · Print · Syntax & Logic Errors', PAD, y + 12);
   ctx.textAlign = 'right';
   ctx.fillText(`Score: ${score}/${total} (${pct}%)  ·  ${dateStr}`, W - PAD, y + 12);
   ctx.textAlign = 'left';
