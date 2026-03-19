@@ -243,7 +243,7 @@
   <div class="icon">🐍</div>
   <div>
     <h1>Python Basics — Do Now</h1>
-    <p>Comments · Inputs · Print statements · Syntax errors · Logic errors</p>
+    <p>Casting · Data types · Print · Syntax errors · Logic errors</p>
   </div>
 </header>
 
@@ -265,88 +265,88 @@ const QUESTIONS = [
   // ── Multiple Choice ──────────────────────────────
   {
     type: 'mc',
-    topic: 'Print',
-    text: 'What is the output of <code>print("Hello" + "World")</code>?',
-    options: ['Hello World', 'Hello+World', 'HelloWorld', 'Error'],
+    topic: 'Data Types',
+    text: 'What is the data type of <code>42</code> in Python?',
+    options: ['float', 'str', 'int', 'bool'],
     answer: 2
   },
   {
     type: 'mc',
-    topic: 'Input',
-    text: 'Which function is used to get input from the user in Python?',
-    options: ['<code>get()</code>', '<code>input()</code>', '<code>read()</code>', '<code>ask()</code>'],
+    topic: 'Casting',
+    text: 'What does <code>int("5")</code> return?',
+    options: ['"5"', '5', 'Error', 'float(5)'],
     answer: 1
   },
   {
     type: 'mc',
     topic: 'Syntax Errors',
     text: 'Which of the following lines contains a <strong>syntax error</strong>?',
-    options: ['<code>print("Hi")</code>', '<code>print("Hi"</code>', '<code>x = 5</code>', '<code># This is a comment</code>'],
+    options: ['<code>print("Hi")</code>', '<code>print("Hi"</code>', '<code>x = int("5")</code>', '<code># A comment</code>'],
     answer: 1
   },
   {
     type: 'mc',
     topic: 'Logic Errors',
-    text: 'A student wants to display their username, but writes <code>print("username")</code> instead of <code>print(username)</code>. What type of error is this?',
-    options: ['Syntax error', 'Logic error', 'No error — it works correctly', 'Missing bracket error'],
+    text: 'A student runs this code but it prints the wrong thing. What type of error is this?<pre>print("Hllo World")</pre>',
+    options: ['Syntax error', 'Logic error', 'No error — it works correctly', 'Runtime error'],
     answer: 1
   },
 
   // ── True / False ─────────────────────────────────
   {
     type: 'tf',
-    topic: 'Comments',
-    text: 'In Python, comments start with the <code>#</code> symbol.',
+    topic: 'Print',
+    text: '<code>print("Hello")</code> is the correct way to display text on the screen in Python.',
     answer: true
   },
   {
     type: 'tf',
-    topic: 'Comments',
-    text: 'Python runs comments as part of the program — they affect how the code works.',
-    answer: false
+    topic: 'Casting',
+    text: '<code>str(42)</code> converts the integer <code>42</code> into a string.',
+    answer: true
   },
   {
     type: 'tf',
-    topic: 'Logic Errors',
-    text: 'A logic error will always stop your program from running and show an error message.',
+    topic: 'Data Types',
+    text: 'The value <code>3.14</code> is an <code>int</code> in Python.',
     answer: false
   },
   {
     type: 'tf',
     topic: 'Syntax Errors',
-    text: 'A syntax error occurs when Python cannot understand your code because it breaks the language rules (e.g. a missing bracket).',
+    text: 'A syntax error will always stop your program from running.',
     answer: true
   },
 
   // ── Fill in the Blank ────────────────────────────
   {
     type: 'fill',
-    topic: 'Comments',
-    text: 'What symbol is used to write a comment in Python?<br><span class="fill-hint">Type the symbol only.</span>',
-    accepted: ['#'],
-    display: '#',
-    placeholder: 'Type the symbol…'
-  },
-  {
-    type: 'fill',
-    topic: 'Input',
-    text: 'Complete the code so it asks the user for their name:<pre>name = ___("What is your name? ")</pre><span class="fill-hint">Type the missing function name.</span>',
-    accepted: ['input'],
-    display: 'input',
-    placeholder: 'Function name…'
-  },
-  {
-    type: 'fill',
     topic: 'Print',
-    text: 'What is the output of the following code?<pre>print(3 * 4)</pre>',
-    accepted: ['12'],
-    display: '12',
-    placeholder: 'Type the output…'
+    text: 'What is the output of the following code?<pre>print("Welcome to Python!")</pre>',
+    accepted: ['welcome to python!'],
+    display: 'Welcome to Python!',
+    placeholder: 'Type the output exactly…'
+  },
+  {
+    type: 'fill',
+    topic: 'Casting',
+    text: 'What function would you use to convert the string <code>"10"</code> into an integer?<br><span class="fill-hint">Type the function name only, e.g. str, float…</span>',
+    accepted: ['int', 'int()'],
+    display: 'int',
+    placeholder: 'e.g. str, float…'
+  },
+  {
+    type: 'fill',
+    topic: 'Data Types',
+    text: 'What is the data type of <code>True</code> in Python?<br><span class="fill-hint">e.g. int, str, float…</span>',
+    accepted: ['bool'],
+    display: 'bool',
+    placeholder: 'e.g. int, str…'
   },
   {
     type: 'fill',
     topic: 'Logic Errors',
-    text: 'A student meant to print <code>Hello World</code> but made a logic error. What does this code actually print?<pre>print("Hllo wrld")</pre>',
+    text: 'A student meant to print <code>Hello World</code> but made a typo. What does this code actually print?<pre>print("Hllo wrld")</pre>',
     accepted: ['hllo wrld'],
     display: 'Hllo wrld',
     placeholder: 'Type the output…'
@@ -575,7 +575,7 @@ function generateReport() {
   ctx.fillText('Python Basics Quiz — Do Now', PAD, 42);
   ctx.font = '14px "Segoe UI", sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,.82)';
-  ctx.fillText('Comments  ·  Inputs  ·  Print Statements  ·  Syntax Errors  ·  Logic Errors', PAD, 66);
+  ctx.fillText('Casting  ·  Data Types  ·  Print  ·  Syntax Errors  ·  Logic Errors', PAD, 66);
   ctx.fillText(dateStr, PAD, 87);
 
   // ── Score Summary ───────────────────────────────
@@ -702,7 +702,7 @@ function generateReport() {
   ctx.fillRect(PAD, y, W - PAD * 2, 1);
   y += 14;
   ctx.fillStyle = '#94a3b8'; ctx.font = '12px "Segoe UI", sans-serif';
-  ctx.fillText('Python Do Now Quiz  ·  Comments · Inputs · Print · Syntax & Logic Errors', PAD, y + 12);
+  ctx.fillText('Python Do Now Quiz  ·  Casting · Data Types · Print · Syntax & Logic Errors', PAD, y + 12);
   ctx.textAlign = 'right';
   ctx.fillText(`Score: ${score}/${total} (${pct}%)  ·  ${dateStr}`, W - PAD, y + 12);
   ctx.textAlign = 'left';
